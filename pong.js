@@ -1,8 +1,8 @@
 //requestAnimationFrame
 var animate = window.requestAnimationFrame ||
-  	window.webkitRequestAnimationFrame ||
-  	window.mosRequestAnimationFrame ||
-  	function(callback) { window.setTimout(callback, 1000/60) };
+    window.webkitRequestAnimationFrame ||
+    window.mosRequestAnimationFrame ||
+    function(callback) { window.setTimout(callback, 1000/60) };
 
 //Setting up canvas, grab its 2d context;
 
@@ -15,17 +15,26 @@ var context = canvas.getContext('2d');
 
 //Step function through animate method.
 
+// var canvas = document.getElementById('myCanvas');
+//       var context = canvas.getContext('2d');
+//       var imageObj = new Image();
+
+//       imageObj.onload = function() {
+//         context.drawImage(imageObj, 0, 0);
+//       };
+//       imageObj.src = 'pongbg.png';
+
 window.onload = function() {
-	document.body.appendChild(canvas);
-	animate(step);
+  document.body.appendChild(canvas);
+  animate(step);
 };
 
 //Step function will update, render and call the function
 
 var step = function() {
-	update();
-	render();
-	animate(step);
+  update();
+  render();
+  animate(step);
 };
 
 //adding context
@@ -34,65 +43,55 @@ var update = function() {
 
 };
 
-var render = function() {
-	// context.fillStyle = '#009FFF';
-	context.fillRect(0, 0, width, height);
-
-var c=document.getElementById("myCanvas");
-var ctx=c.getContext("2d");
-var img=document.getElementById("pongbg");
-ctx.drawImage(img,10,10);
-};
-
 //adding paddles and ball
 
 function Paddle(x, y, width, height) {
-	this.x = x;
-	this.y = y;
-	this.width = width;
-	this.height = height;
-	this.x_speed = 0;
-	this.y_speed = 0;
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+  this.x_speed = 0;
+  this.y_speed = 0;
 }
 
 Paddle.prototype.render = function() {
-	context.fillStyle = "#fff";
-	context.fillRect(this.x, this.y, this.width, this.height);
+  context.fillStyle = "#fff";
+  context.fillRect(this.x, this.y, this.width, this.height);
 };
 
 //create objects for user and cpu paddles
 
 function Player() {
-	this.paddle = new Paddle(175, 580, 50, 10);
+  this.paddle = new Paddle(175, 580, 50, 10);
 }
 
 function Computer() {
-	this.paddle = new Paddle(175, 10, 50, 10);
+  this.paddle = new Paddle(175, 10, 50, 10);
 }
 
 //Just rendering the paddles, using this because function was already set
 
 Player.prototype.render = function() {
-	this.paddle.render();
+  this.paddle.render();
 };
 
 Computer.prototype.render = function() {
-	this.paddle.render();
+  this.paddle.render();
 };
 
 function Ball(x, y) {
-	this.x = x;
-	this.y = y;
-	this.x_speed = 0;
-	this.y_speed = 3;
-	this.radius = 5;
+  this.x = x;
+  this.y = y;
+  this.x_speed = 0;
+  this.y_speed = 3;
+  this.radius = 5;
 }
 
 Ball.prototype.render = function() {
-	context.beginPath();
-	context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
-	context.fillStyle = "#fff";
-	context.fill();
+  context.beginPath();
+  context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
+  context.fillStyle = "#fff";
+  context.fill();
 };
 
 //Building our objects; updater render function.
@@ -105,48 +104,53 @@ player.score = 0;
 computer.score = 0;
 
 var render = function() {
-	context.fillStyle = "009FFF";
-  	context.fillRect(0, 0, width, height);
-  	player.render();
-  	computer.render();
-  	ball.render();
+  context.fillStyle = "009FFF";
+  context.fillRect(0, 0, width, height);
+
+  var img = new Image();
+  img.src = "pongbg.png";
+  context.drawImage(img, 0, 0);
+
+  player.render();
+  computer.render();
+  ball.render();
 };
 
 //Animation
 
 var update = function() {
-	ball.update();
+  ball.update();
 };
 
 Ball.prototype.update = function() {
-	this.x += this.x_speed;
-	this.y += this.y_speed;
+  this.x += this.x_speed;
+  this.y += this.y_speed;
 };
 
 //collision + passing in paddles into update method
 
 var update = function() {
-	ball.update(player.paddle, computer.paddle);
+  ball.update(player.paddle, computer.paddle);
 };
 
 Ball.prototype.update = function(paddle1, paddle2) {
-	this.x += this.x_speed;
-  	this.y += this.y_speed;
-  	var top_x = this.x - 5;
-  	var top_y = this.y - 5;
-  	var bottom_x = this.x + 5;
-  	var bottom_y = this.y + 5;
+  this.x += this.x_speed;
+    this.y += this.y_speed;
+    var top_x = this.x - 5;
+    var top_y = this.y - 5;
+    var bottom_x = this.x + 5;
+    var bottom_y = this.y + 5;
 
-  	if(this.x - 5 < 0) {
-  	  this.x = 5;
-  	  this.x_speed = -this.x_speed;
+    if(this.x - 5 < 0) {
+      this.x = 5;
+      this.x_speed = -this.x_speed;
     } else if(this.x + 5 > 400) { // hitting the right wall
       this.x = 395;
       this.x_speed = -this.x_speed;
-  	}
+    }
 
-  	if(this.y < 0 || this.y > 600) {
-  	  this.x_speed = 0;
+    if(this.y < 0 || this.y > 600) {
+      this.x_speed = 0;
       this.y_speed = 3;
       this.x = 200;
       this.y = 300;
@@ -174,9 +178,9 @@ Ball.prototype.update = function(paddle1, paddle2) {
           alert('computer wins');
         }
       }
-  	}
+    }
 
-  	if(top_y > 300) {
+    if(top_y > 300) {
       if(top_y < (paddle1.y + paddle1.height) && bottom_y > paddle1.y && top_x < (paddle1.x + paddle1.width) && bottom_x > paddle1.x) {
       // hit the player's paddle
       this.y_speed = -3;
