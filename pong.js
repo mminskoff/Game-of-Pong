@@ -108,7 +108,7 @@ var render = function() {
   context.fillRect(0, 0, width, height);
 
   var img = new Image();
-  img.src = "pongbg.png";
+  img.src = "pongbg.jpg";
   context.drawImage(img, 0, 0);
 
   player.render();
